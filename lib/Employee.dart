@@ -1,10 +1,20 @@
 import 'dart:convert';
-//import 'package:dio/dio.dart';
+import 'package:api/EmployeeItem.dart';
+import 'package:dio/dio.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 
+class AppModel extends Model{
+  List<Employee> _list = [];
+  List<Employee> get list => _list;
+
+  void addEmployee(Employee emp){
+    _list.add(emp);
+  }
+}
 
 
-class Employee{
+class Employee extends Model{
   String id;
   String employeeName;
   String employeeSalary;
@@ -13,87 +23,37 @@ class Employee{
 
   Employee.details();
 
-  Employee({
+
+  Employee.entered(String name, String age){
+    this.employeeName = name;
+    this.employeeAge = age;
+  }
+
+  Employee( {
     this.id,
     this.employeeName,
     this.employeeSalary,
     this.employeeAge,
     this.employeeImage,
   });
-}
-
-
-/*
-Employee employeesFromJson(String str) => Employee.fromJson(json.decode(str));
-String employeesToJson(Employee data) => json.encode(data.toJson());
-
-
-class Employee {
-  Employee({
-    this.data,
-  });
-
-  List<Datum> data;
 
   factory Employee.fromJson(Map<String, dynamic> json) => Employee(
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
-}
-
-class Datum {
-  Datum({
-    this.id,
-    this.name,
-    this.salary,
-    this.age,
-    this.image,
-  });
-
-  String id;
-  String name;
-  String salary;
-  String age;
-  String image;
-
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
-    name: json["name"],
-    salary: json["salary"],
-    age: json["age"],
-    image: json["image"],
+    employeeName: json["employee_name"],
+    employeeSalary: json["employee_salary"],
+    employeeAge: json["employee_age"],
+    employeeImage: json["employee_image"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "name": name,
-    "age": age,
-    "salary": salary,
-    "images": image,
+    "employee_name": employeeName,
+    "employee_age": employeeAge,
+    "employee_salary": employeeSalary,
+    "employee_image": employeeImage,
   };
+
+
+
 }
 
-
-final client = Dio();
-
-Future<Employee> getData() async {
-  final url = 'http://dummy.restapiexample.com/api/v1/employees';
-  List<Employee> empList = [];
-  try {
-    final response = await client.get(url);
-
-    if (response.statusCode == 200) {
-      return Employee.fromJson(response.data);
-    } else {
-      print('${response.statusCode} : ${response.data.toString()}');
-      throw response.statusCode;
-    }
-  } catch (error) {
-    print(error);
-  }
-  Employee data = await getData();
-}
-*/

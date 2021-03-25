@@ -1,3 +1,5 @@
+import 'package:api/network.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:api/Employee.dart';
 import 'EmployeeItem.dart';
@@ -6,21 +8,13 @@ import 'EmployeeItem.dart';
 class EmpListView extends StatefulWidget {
   EmpListView({Key key}) : super(key: key);
 
-  Employee empZero = new Employee();
-  empZero.id = "1";
-  empZero.employeeName = "Mohamed";
-  empZero.employeeSalary = "2000";
-  empZero.employeeAge = "22";
-  empZero.employeeImage = "AAA";
-
   @override
   _ListViewState createState() => _ListViewState();
 }
 
 class _ListViewState extends State<EmpListView> {
 
-
-  List<Employee> employees = [empZero];
+  List<Employee> employees = new List();
 
   @override
   void initState() {
@@ -64,20 +58,27 @@ class _ListViewState extends State<EmpListView> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(title: Text("Employee App")),
-      body: Container(
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
-          ),
-          itemCount: employees.length,
-          itemBuilder: (_, index) {
-            Employee emp = employees[index];
-            return EmployeeItem(emp);
-          },
-        ),
+      body: FutureBuilder(
+        future: DataFetcher().getData(),
+        builder: (context, snapshot){
+          if(snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData){
+            return Center(child: CircularProgressIndicator(),);
+          }else if(snapshot.hasError){
+            return Center(
+              child: Text("Error"),
+            );
+          }else return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (_, index) {
+              Employee emp = snapshot.data[index];
+              print(snapshot.data[index].toString());
+              return EmployeeItem(emp);
+            },
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: null,
+        onPressed: (){}, label: Text("+"),
       ),
     );
   }

@@ -15,10 +15,6 @@ class EmployeeItem extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 10),
         child: Column(
           children: [
-            Container(
-              height: 100,
-              child: Image.asset(emp.employeeImage),
-            ),
             SizedBox(height: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,7 +30,7 @@ class EmployeeItem extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  emp.employeeName,
+                  emp.employeeAge,
                   style: TextStyle(
                     color: Colors.white,
                   ),
